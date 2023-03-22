@@ -1,6 +1,7 @@
 function Total({course}) {
+    const total = course.parts.reduce((acc, part) => acc+part.exercises, 0)
     return (
-        <p>Number of exercises {course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises}</p>
+        <p>Number of exercises {total}</p>
     )
 }
 
