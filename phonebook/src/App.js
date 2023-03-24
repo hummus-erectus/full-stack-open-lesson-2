@@ -20,7 +20,7 @@ const App = () => {
   }, [])
 
 
-  const addNumber = (e) => {
+  const addNumber = e => {
     e.preventDefault()
 
     if (persons.some(person => person.name === newName)){
@@ -29,7 +29,6 @@ const App = () => {
       const personObject = {
         name: newName,
         number: newNumber,
-        id: persons.length + 1,
       }
 
       personService
@@ -40,7 +39,15 @@ const App = () => {
           setNewNumber('')
         })
     }
+  }
 
+  const deleteNumber = id => {
+    // const person = persons.find(p => p.id === id)
+    personService
+      .deleteObj(id)
+      .then(response => {
+        setPersons(persons.filter(person => person.id !== id))
+      })
   }
 
   return (
@@ -60,6 +67,7 @@ const App = () => {
       <h2>Numbers</h2>
       <Persons
         persons={persons}
+        deleteNumber={deleteNumber}
         searchTerm={searchTerm}
       />
       <div>debug: {newName}</div>
