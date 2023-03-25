@@ -10,7 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
-  const [feedbackMessage, setFeedbackMessage] = useState('')
+  const [feedbackMessage, setFeedbackMessage] = useState(null)
 
   useEffect(() => {
       personService
@@ -34,6 +34,15 @@ const App = () => {
           .update(existingPerson.id, updatedPerson)
           .then(returnedPerson => {
             setPersons(persons.map(person => person.id !== existingPerson.id ? person : returnedPerson))
+            setNewName('')
+            setNewNumber('')
+            setFeedbackMessage({
+              message: `Updated ${returnedPerson.name}'s phone number`,
+              type: 'success'
+            })
+            setTimeout(() => {
+              setFeedbackMessage(null)
+            }, 5000)
           })
       }
     } else {
@@ -48,9 +57,10 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
-          setFeedbackMessage(
-            `Added ${returnedPerson.name} to phonebook`
-          )
+          setFeedbackMessage({
+            message: `Added ${returnedPerson.name} to phonebook`,
+            type: 'success'
+          })
           setTimeout(() => {
             setFeedbackMessage(null)
           }, 5000)
@@ -69,11 +79,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      {feedbackMessage ?
-        <Notification message={feedbackMessage}/>
-        :
-        null
-      }
+      <Notification feedbackMessage={feedbackMessage} />
       <SearchFilter
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
