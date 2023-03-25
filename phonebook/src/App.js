@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import personService from './services/persons'
 import PersonForm from './components/PersonForm'
 import SearchFilter from './components/SearchFilter'
 import Persons from './components/Persons'
+import { Notification } from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
+  const [feedbackMessage, setFeedbackMessage] = useState('')
 
   useEffect(() => {
       personService
@@ -47,12 +48,17 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
+          setFeedbackMessage(
+            `Added ${returnedPerson.name} to phonebook`
+          )
+          setTimeout(() => {
+            setFeedbackMessage(null)
+          }, 5000)
         })
     }
   }
 
   const deleteNumber = id => {
-    // const person = persons.find(p => p.id === id)
     personService
       .deleteObj(id)
       .then(response => {
@@ -62,7 +68,12 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      {feedbackMessage ?
+        <Notification message={feedbackMessage}/>
+        :
+        null
+      }
       <SearchFilter
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
