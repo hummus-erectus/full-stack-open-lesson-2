@@ -37,12 +37,21 @@ const App = () => {
             setNewName('')
             setNewNumber('')
             setFeedbackMessage({
-              message: `Updated ${returnedPerson.name}'s phone number`,
+              message: `Updated ${updatedPerson.name}'s phone number`,
               type: 'success'
             })
             setTimeout(() => {
               setFeedbackMessage(null)
             }, 5000)
+          })
+          .catch(error => {
+            setPersons(persons.filter(person => person.name !== updatedPerson.name))
+            setNewName('')
+            setNewNumber('')
+            setFeedbackMessage({
+              message: `${updatedPerson.name}'s information has already been removed from the server`,
+              type: 'error'
+            })
           })
       }
     } else {
