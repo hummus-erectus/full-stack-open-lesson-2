@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import SearchFilter from "./components/SearchFilter"
 import countryService from './services/countries'
 import CountryData from "./components/CountryData"
+import CountryList from "./components/CountryList"
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -17,6 +18,10 @@ const App = () => {
 
   const displayedCountries = countries.filter((country) => country.name.common.toLowerCase().includes(searchTerm.toLowerCase()))
 
+  const showSelected = (country) => {
+    setSearchTerm(country)
+  }
+
   return (
     <div>
       <SearchFilter
@@ -27,9 +32,7 @@ const App = () => {
         <p>Too many matches, please specify another filter</p>
       :
         (displayedCountries.length >1 ?
-          displayedCountries.map((country) => (
-                <p key={country.name.common}>{country.name.common}</p>
-            ))
+          <CountryList countries={displayedCountries} showSelected={showSelected}/>
         :
           (displayedCountries.length === 1?
             <CountryData country={displayedCountries[0]}/>
