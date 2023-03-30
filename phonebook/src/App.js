@@ -45,13 +45,26 @@ const App = () => {
             }, 5000)
           })
           .catch(error => {
-            setPersons(persons.filter(person => person.name !== updatedPerson.name))
-            setNewName('')
-            setNewNumber('')
-            setFeedbackMessage({
-              message: `${updatedPerson.name}'s information has already been removed from the server`,
-              type: 'error'
-            })
+            if (error.response.data) {
+              setFeedbackMessage({
+                message: error.response.data.error,
+                type: 'error'
+              })
+              setTimeout(() => {
+                setFeedbackMessage(null)
+              }, 5000)
+            } else {
+              setFeedbackMessage({
+                message: `${updatedPerson.name}'s information has already been removed from the server`,
+                type: 'error'
+              })
+              setPersons(persons.filter(person => person.name !== updatedPerson.name))
+              setNewName('')
+              setNewNumber('')
+              setTimeout(() => {
+                setFeedbackMessage(null)
+              }, 5000)
+            }
           })
       }
     } else {
