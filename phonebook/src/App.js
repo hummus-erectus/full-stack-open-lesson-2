@@ -74,6 +74,15 @@ const App = () => {
             setFeedbackMessage(null)
           }, 5000)
         })
+        .catch (error => {
+          setFeedbackMessage({
+            message: error.response.data.error,
+            type: 'error'
+          })
+          setTimeout(() => {
+            setFeedbackMessage(null)
+          }, 5000)
+        })
     }
   }
 
